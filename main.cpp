@@ -11,8 +11,8 @@ void invert(Image& image){
   for(int r=0; r<image.width; r++ ){
     for(int c=0; c<image.height; c++ ){
       image(r,c,0)=255-image(r,c,0);
-      image(r,c,0)=255-image(r,c,1);
-      image(r,c,0)=255-image(r,c,2);
+      image(r,c,1)=255-image(r,c,1);
+      image(r,c,2)=255-image(r,c,2);
     }
   }
 }

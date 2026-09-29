@@ -6,15 +6,8 @@ this massage will be deleted at last step*/
 
 using namespace std;
 
-int main()
-{
-  string photo;
-  cin>>photo;
-  Image image(photo);
-
-
-
 //Invertion
+void invert(Image& image){
   for(int r=0; r<image.width; r++ ){
     for(int c=0; c<image.height; c++ ){
       image(r,c,0)=255-image(r,c,0);
@@ -22,10 +15,35 @@ int main()
       image(r,c,0)=255-image(r,c,2);
     }
   }
+}
+int main()
+{
+  string photo;
+  int n;
+
+  //Menu
+
+  cin>>photo;
+  cin>>n;
+
+  Image image(photo);
+  switch(n){
+  case 1:
+  case 2:
+  case 3:invert(image);           break;
+  //case 4:
+  //case 5:
+  //case 6:
+  //case 7:
+  //case 8:
+  default:cout<<"No such a choice";break;
+  }
 
 
 //saving(need optimization)
-  image.saveImage(photo);
-  system(photo.c_str());
+  string newphoto;
+  cin>>newphoto;
+  image.saveImage(newphoto);
+  system(newphoto.c_str());
     return 0;
 }

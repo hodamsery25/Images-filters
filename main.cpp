@@ -20,13 +20,11 @@ void invert(Image& image){
 void brightness(Image& image){
   int M;
   float v;
-  cout<< "\n 1] increase Brightness   2]: decrease Brightness\n ";
+  cout<< " 1] increase Brightness   2]: decrease Brightness\n ";
   cin >> M;
   cout<< " Enter the percentage [0~300%]: ";
   cin >> v;
- // cout<<v<<"  ";
   v = v/100+1 ;   if(M==2) v = 1/v;
-  //cout<<v;
   for(int r=0; r<image.width; r++ ){
     for(int c=0; c<image.height; c++ ){
       for(int N=0; N<3; N++){
@@ -37,14 +35,18 @@ void brightness(Image& image){
     }
   }
 }
+
 int main()
 {
   string photo;
   int choice;
 
-  //Menu
-
+  cout<<" Enter Image's Name [with extention]: ";
   cin>>photo;
+  
+  //Menu
+  
+  cout<<" chose Filter's number: ";
   cin>>choice;
   Image image(photo);
   switch(choice){
@@ -53,21 +55,22 @@ int main()
   case 3:
       invert(image);
       break;
-  //case 4:
-  //case 5:
-  //case
+  case 4:
+  case 5:
+  case 6:
   case 7:
       brightness(image);
       break;
-  //case 8:
+  case 8:
   default:
-      cout<< "Invalid choice!\n";
+      cout<< "=>Invalid choice!\n";
       break;
   }
 
 
 //saving
   string newphoto;
+  cout<<" Modifed Image's Name [with wanted extevtion]: "
   cin>>newphoto;
   image.saveImage(newphoto);
   system(newphoto.c_str());

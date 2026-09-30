@@ -19,6 +19,7 @@ void Black&White(Image& image) {
     }
   }
 }
+
 // 3] Invertion
 void invert(Image& image){
   for(int r=0; r<image.width; r++ ){
@@ -30,6 +31,29 @@ void invert(Image& image){
   }
 }
 
+//4] Frame
+void frame (Image& image){
+  int m,s ;
+  cout << " 1]thin  2]thick \n";
+  cin >> m;
+  s = (m==1 ? 20:40 );
+  Image fr (image.width + 2*s ,image.height + 2*s);
+  for(int r=0; r < fr.width; r++ ){
+    for(int c=0; c < fr.height; c++ ){
+      for(int N=0; N<3; N++){
+        fr(r,c,N) = 0;
+      }
+    }
+  }
+  for (int x=0; x < image.width ; x++){
+    for (int y=0; y < image.height ; y++){
+      for(int N=0; N<3; N++){
+        fr(x+s,y+s,N) = image(x,y,N);
+      }
+    }
+  }
+  image = fr;
+}
 
 // 6] Rotation
 void Rotation (Image& image)
@@ -113,6 +137,8 @@ int main()
       invert(image);
       break;
   case 4:
+      frame(image);
+      break;
   case 5:
   case 6:
   case 7:

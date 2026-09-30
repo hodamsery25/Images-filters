@@ -76,3 +76,124 @@ int main()
   system(newphoto.c_str());
     return 0;
 }
+// filter 2
+void applyBlackAndWhiteFilter(Image& image) {
+    for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            unsigned char r = image.getPixel(i, j, 0);
+            unsigned char g = image.getPixel(i, j, 1);
+            unsigned char b = image.getPixel(i, j, 2);
+
+            int avg = (r + g + b) / 3;
+            unsigned char newValue = (avg >= 128) ? 255 : 0;
+
+            image.setPixel(i, j, 0, newValue);
+            image.setPixel(i, j, 1, newValue);
+            image.setPixel(i, j, 2, newValue);
+        }
+    }
+}
+
+int main() {
+    string inputFilename, outputFilename;
+
+    cout << "Enter input image filename: ";
+    cin >> inputFilename;
+
+    Image image(inputFilename);
+
+    applyBlackAndWhiteFilter(image);
+
+    cout << "Enter output image filename: ";
+    cin >> outputFilename;
+
+    image.saveImage(outputFilename);
+
+    cout << "do you want to apply another filter? (y/n): ";
+    char choice;
+    cin >> choice;
+
+    while (choice == 'y' || choice == 'Y') {
+        cout << "Enter input image filename: ";
+        cin >> inputFilename;
+
+        Image newImage(inputFilename);
+
+        applyBlackAndWhiteFilter(newImage);
+
+        cout << "Enter output image filename: ";
+        cin >> outputFilename;
+
+        newImage.saveImage(outputFilename);
+
+        cout << "do you want to apply another filter? (y/n): ";
+        cin >> choice;
+    }
+
+    cout << "thank you." << endl;
+    return 0;
+    // filter 6
+    int main() {
+    string inputFilename;
+    cout << "Enter input image filename: ";
+    cin >> inputFilename;
+
+    Image image(inputFilename);
+
+    int angle;
+    cout << "Enter rotation angle (90, 180, or 270): ";
+    cin >> angle;
+
+    string outputFilename;
+
+    if (angle == 90) {
+        Image rotated(image.height, image.width);
+        for (int x = 0; x < image.width; ++x) {
+            for (int y = 0; y < image.height; ++y) {
+                for (int c = 0; c < 3; ++c) {
+                    rotated(y, image.width - 1 - x, c) = image(x, y, c);
+                }
+            }
+        }
+
+        cout << "Enter output image filename: ";
+        cin >> outputFilename;
+        rotated.saveImage(outputFilename);
+        cout << "Image rotated 90 degrees successfully!\n";
+
+    } else if (angle == 180) {
+        Image rotated(image.width, image.height);
+        for (int x = 0; x < image.width; ++x) {
+            for (int y = 0; y < image.height; ++y) {
+                for (int c = 0; c < 3; ++c) {
+                    rotated(image.width - 1 - x, image.height - 1 - y, c) = image(x, y, c);
+                }
+            }
+        }
+
+        cout << "Enter output image filename: ";
+        cin >> outputFilename;
+        rotated.saveImage(outputFilename);
+        cout << "Image rotated 180 degrees successfully!\n";
+
+    } else if (angle == 270) {
+        Image rotated(image.height, image.width);
+        for (int x = 0; x < image.width; ++x) {
+            for (int y = 0; y < image.height; ++y) {
+                for (int c = 0; c < 3; ++c) {
+                    rotated(image.height - 1 - y, x, c) = image(x, y, c);
+                }
+            }
+        }
+
+        cout << "Enter output image filename: ";
+        cin >> outputFilename;
+        rotated.saveImage(outputFilename);
+        cout << "Image rotated 270 degrees successfully!\n";
+
+    } else {
+        cout << "Invalid angle! Please enter 90, 180, or 270.\n";
+    }
+
+    return 0;
+}

@@ -1,7 +1,5 @@
-/*Welcome team
-this is the main repo, we will add filters & menu HERE,
-this massage will be deleted at last step*/
-#include"Image_Class.h"
+#include "Image_Class.h"
+#include<filesystem>
 using namespace std;
 
 // filter 2
@@ -11,8 +9,8 @@ void Black_White (Image& image) {
       unsigned char r = image.getPixel(i, j, 0);
       unsigned char g = image.getPixel(i, j, 1);
       unsigned char b = image.getPixel(i, j, 2);
-      int avg = (r + g + b) / 3;
-      unsigned char newValue = (avg >= 128) ? 255 : 0;
+      int avg = (r+g+b)/3;
+      unsigned char newValue = (avg >= 128 ? 255:0);
       image.setPixel(i, j, 0, newValue);
       image.setPixel(i, j, 1, newValue);
       image.setPixel(i, j, 2, newValue);
@@ -20,7 +18,7 @@ void Black_White (Image& image) {
   }
 }
 
-// 3] Invertion
+// 3] Inverting
 void invert(Image& image){
   for(int r=0; r < image.width; r++ ){
     for(int c=0; c < image.height; c++ ){
@@ -34,9 +32,9 @@ void invert(Image& image){
 ////4] Frame
 void frame (Image& image){
   int m,s ;
-  cout << " 1]thin  2]thick \n";
+  cout<< " 1]Thin  2]Thick \n ";
   cin >> m;
-  s = (m==1 ? 20:40 );
+  s = (m==1 ? 20:50 );
   Image fr (image.width + 2*s ,image.height + 2*s);
   for(int r=0; r < fr.width; r++ ){
     for(int c=0; c < fr.height; c++ ){
@@ -56,7 +54,7 @@ void frame (Image& image){
 }
 
 //// 6] Rotation
-void rotate (Image& image){
+void Rotate (Image& image){
   int angle;
   cout << " Enter rotation angle [90-180-270]: ";
   cin >> angle;
@@ -69,8 +67,8 @@ void rotate (Image& image){
         }
       }
     }
-    cout << "Image rotated 90 degrees successfully!\n";
-  } 
+    image = rotated;
+  }
   else if (angle == 180) {
     Image rotated(image.width, image.height);
     for (int x = 0; x < image.width; ++x) {
@@ -80,8 +78,8 @@ void rotate (Image& image){
         }
       }
     }
-    cout << "Image rotated 180 degrees successfully!\n";
-  } 
+    image = rotated;
+  }
   else if (angle == 270) {
     Image rotated(image.height, image.width);
     for (int x = 0; x < image.width; ++x) {
@@ -91,16 +89,16 @@ void rotate (Image& image){
         }
       }
     }
-    cout << "Image rotated 270 degrees successfully!\n"; 
+    image = rotated;
   }
-  else   cout << "Invalid angle! Please enter 90, 180, or 270.\n";
+  else   cout << "=>Invalid angle! \n ";
 }
 
 //// 7] Brightness
 void brightness (Image& image){
   int M;
   float v;
-  cout<< " 1] increase Brightness   2]: decrease Brightness\n ";
+  cout<< " 1] Increase Brightness   2]: Decrease Brightness\n ";
   cin >> M;
   cout<< " Enter the percentage [0~300%]: ";
   cin >> v;
@@ -114,7 +112,7 @@ void brightness (Image& image){
     }
   }
 }
- ////Resize
+ //// 8] Resize
 void Resize (Image& image){
   int w,h;
   cout <<" Original dimensions: [" << image.width << "x" << image.height <<"]"<< endl;
@@ -139,16 +137,18 @@ int main()
 {
 string photo;
 int choice;
-char answer;
-cout<<" Enter Image's Name [with extention]: ";
+string answer;
+cout<<" Enter Image's Name [with extension]: ";
 cin>>photo;
 Image image(photo);
+Image tempimage;//for saving
+string tempphoto = "tempphoto.jpg";
 do {
   //Menu
-  
+
   cout<<" chose Filter's number: ";
-  cin>>choice;
-  switch (choice) { 
+  cin >> choice;
+  switch (choice) {
   case 1:
   case 2:
       Black_White(image);
@@ -161,7 +161,7 @@ do {
       break;
   case 5:
   case 6:
-      rotate(image);
+      Rotate(image);
       break;
   case 7:
       brightness(image);
@@ -170,24 +170,27 @@ do {
       Resize(image);
       break;
   default:
-      cout<< "=>Invalid choice!\n";
+      cout<< "=>Invalid choice!\n ";
       break;
   }
-
+  choice = 0;
 
 //saving
-  string tempphoto;
-  image.saveImage(tempphoto);
+
+  tempimage = image;
+  tempimage.saveImage(tempphoto);
   system(tempphoto.c_str());
-  cout << " Do you want to apply another filter?\n "; 
-  cin >> answer; 
+  remove("tempphoto.jpg");
+  cout << " Do you want to apply another filter?\n ";
+  cin >> answer;
 }
-while ( answer == 'y' || answer == 'Y')
+while ( answer[0] == 'y' || answer[0] == 'Y');
+//final saving
 string newphoto;
-cout<<" Modifed Image's Name [with wanted extevtion]: "
+cout<<" Enter Modified Image Name [with wanted extension]: ";
 cin>>newphoto;
 image.saveImage(newphoto);
-//delete temp photo
-cout << " Thank you." << endl;
+cout << "\n >> Modified Image saved successfully! "<<endl;
+cout << "\n << Thank you for using our program! >>\n" << endl;
 return 0;
 }

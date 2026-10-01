@@ -5,9 +5,9 @@ this massage will be deleted at last step*/
 using namespace std;
 
 // filter 2
-void Black_White(Image& image) {
-  for (int i = 0; i < image.width; ++i) {
-    for (int j = 0; j < image.height; ++j) {
+void Black_White (Image& image) {
+  for (int i=0; i < image.width; ++i) {
+    for (int j=0; j < image.height; ++j) {
       unsigned char r = image.getPixel(i, j, 0);
       unsigned char g = image.getPixel(i, j, 1);
       unsigned char b = image.getPixel(i, j, 2);
@@ -22,8 +22,8 @@ void Black_White(Image& image) {
 
 // 3] Invertion
 void invert(Image& image){
-  for(int r=0; r<image.width; r++ ){
-    for(int c=0; c<image.height; c++ ){
+  for(int r=0; r < image.width; r++ ){
+    for(int c=0; c < image.height; c++ ){
       image(r,c,0)=255-image(r,c,0);
       image(r,c,1)=255-image(r,c,1);
       image(r,c,2)=255-image(r,c,2);
@@ -31,7 +31,7 @@ void invert(Image& image){
   }
 }
 
-//4] Frame
+////4] Frame
 void frame (Image& image){
   int m,s ;
   cout << " 1]thin  2]thick \n";
@@ -55,7 +55,7 @@ void frame (Image& image){
   image = fr;
 }
 
-// 6] Rotation
+//// 6] Rotation
 void rotate (Image& image){
   int angle;
   cout << " Enter rotation angle [90-180-270]: ";
@@ -65,7 +65,7 @@ void rotate (Image& image){
     for (int x = 0; x < image.width; ++x) {
       for (int y = 0; y < image.height; ++y) {
         for (int c = 0; c < 3; ++c) {
-          rotated(y, image.width - 1 - x, c) = image(x, y, c);
+          rotated ( y, image.width - 1 - x , c ) = image (x, y, c);
         }
       }
     }
@@ -76,7 +76,7 @@ void rotate (Image& image){
     for (int x = 0; x < image.width; ++x) {
       for (int y = 0; y < image.height; ++y) {
         for (int c = 0; c < 3; ++c) {
-          rotated(image.width - 1 - x, image.height - 1 - y, c) = image(x, y, c);
+          rotated (image.width - 1 - x, image.height - 1 - y, c) = image(x, y, c);
         }
       }
     }
@@ -96,8 +96,8 @@ void rotate (Image& image){
   else   cout << "Invalid angle! Please enter 90, 180, or 270.\n";
 }
 
-// 7] Brightness
-void brightness(Image& image){
+//// 7] Brightness
+void brightness (Image& image){
   int M;
   float v;
   cout<< " 1] increase Brightness   2]: decrease Brightness\n ";
@@ -114,7 +114,26 @@ void brightness(Image& image){
     }
   }
 }
-
+ ////Resize
+void Resize (Image& image){
+  int w,h;
+  cout <<" Original dimensions: [" << image.width << "x" << image.height <<"]"<< endl;
+  cout <<" New width : ";
+  cin >> w;
+  cout <<" New height : ";
+  cin >> h;
+  Image resized(w,h);
+  for (int x=0; x<w; x++){
+    for (int y=0; y<h; y++){
+      int X = x*image.width/w;
+      int Y = y*image.height/h;
+      for (int c=0; c<3; c++){
+        resized(x, y, c) = image(X, Y, c);
+      }
+    }
+  }
+  image = resized;
+}
 
 int main()
 {
@@ -148,6 +167,8 @@ do {
       brightness(image);
       break;
   case 8:
+      Resize(image);
+      break;
   default:
       cout<< "=>Invalid choice!\n";
       break;

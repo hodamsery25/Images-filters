@@ -5,7 +5,7 @@ this massage will be deleted at last step*/
 using namespace std;
 
 // filter 2
-void Black&White(Image& image) {
+void Black_White(Image& image) {
   for (int i = 0; i < image.width; ++i) {
     for (int j = 0; j < image.height; ++j) {
       unsigned char r = image.getPixel(i, j, 0);
@@ -56,7 +56,7 @@ void frame (Image& image){
 }
 
 // 6] Rotation
-void Rotation (Image& image)
+void rotate (Image& image){
   int angle;
   cout << " Enter rotation angle [90-180-270]: ";
   cin >> angle;
@@ -82,18 +82,19 @@ void Rotation (Image& image)
     }
     cout << "Image rotated 180 degrees successfully!\n";
   } 
-else if (angle == 270) {
-  Image rotated(image.height, image.width);
-  for (int x = 0; x < image.width; ++x) {
-    for (int y = 0; y < image.height; ++y) {
-      for (int c = 0; c < 3; ++c) {
-        rotated(image.height - 1 - y, x, c) = image(x, y, c);
+  else if (angle == 270) {
+    Image rotated(image.height, image.width);
+    for (int x = 0; x < image.width; ++x) {
+      for (int y = 0; y < image.height; ++y) {
+        for (int c = 0; c < 3; ++c) {
+          rotated(image.height - 1 - y, x, c) = image(x, y, c);
+        }
       }
     }
+    cout << "Image rotated 270 degrees successfully!\n"; 
   }
-  cout << "Image rotated 270 degrees successfully!\n"; 
-else   cout << "Invalid angle! Please enter 90, 180, or 270.\n";
-
+  else   cout << "Invalid angle! Please enter 90, 180, or 270.\n";
+}
 
 // 7] Brightness
 void brightness(Image& image){
@@ -122,16 +123,16 @@ int choice;
 char answer;
 cout<<" Enter Image's Name [with extention]: ";
 cin>>photo;
+Image image(photo);
 do {
   //Menu
   
   cout<<" chose Filter's number: ";
   cin>>choice;
-  Image image(photo);
-  switch(choice) { 
+  switch (choice) { 
   case 1:
   case 2:
-      Black&White(image);
+      Black_White(image);
       break;
   case 3:
       invert(image);
@@ -141,6 +142,8 @@ do {
       break;
   case 5:
   case 6:
+      rotate(image);
+      break;
   case 7:
       brightness(image);
       break;

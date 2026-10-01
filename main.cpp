@@ -117,18 +117,18 @@ void brightness(Image& image){
 
 int main()
 {
-  string photo;
-  int choice;
-
-  cout<<" Enter Image's Name [with extention]: ";
-  cin>>photo;
-  
+string photo;
+int choice;
+char answer;
+cout<<" Enter Image's Name [with extention]: ";
+cin>>photo;
+do {
   //Menu
   
   cout<<" chose Filter's number: ";
   cin>>choice;
   Image image(photo);
-  switch(choice){
+  switch(choice) { 
   case 1:
   case 2:
       Black&White(image);
@@ -152,29 +152,18 @@ int main()
 
 
 //saving
-  string newphoto;
-  cout<<" Modifed Image's Name [with wanted extevtion]: "
-  cin>>newphoto;
-  image.saveImage(newphoto);
-  system(newphoto.c_str());
-  cout << " thank you." << endl;
-    return 0;
+  string tempphoto;
+  image.saveImage(tempphoto);
+  system(tempphoto.c_str());
+  cout << " Do you want to apply another filter?\n "; 
+  cin >> answer; 
 }
-
-////////////////////////while loop
- /* 
-    cout << "do you want to apply another filter? (y/n): ";
-    char choice;
-    cin >> choice;
-
-    while (choice == 'y' || choice == 'Y') {
-        cout << "Enter input image filename: ";
-        cin >> inputFilename;
-        Image newImage(inputFilename);
-/////
-        cout << "Enter output image filename: ";
-        cin >> outputFilename;
-        newImage.saveImage(outputFilename);
-        cout << "do you want to apply another filter? (y/n): ";
-        cin >> choice;
-    }    */
+while ( answer == 'y' || answer == 'Y')
+string newphoto;
+cout<<" Modifed Image's Name [with wanted extevtion]: "
+cin>>newphoto;
+image.saveImage(newphoto);
+//delete temp photo
+cout << " Thank you." << endl;
+return 0;
+}

@@ -1,3 +1,12 @@
+/*      < 2026-2027 >
+FCAI-CU > 2nd Level > OOP > Assignment 1 > Image Filters
+Section : (15,16)
+Team members :
+20250666 Malak Mohamed  Filters: 1]Gray scale     5]Flip
+20250693 Merna Hany     Filters: 2]Black & White  6]Rotate
+20250721 Hoda Ahmad     Filters: 3]Inverting      7]Brightness
+20251051 Alaa Sayed    Filters: 4]Frame          8] Resize
+*/
 #include "Image_Class.h"
 #include<filesystem>
 using namespace std;
@@ -17,7 +26,7 @@ void grayscale(Image& image) {
   }
 }
 
-// filter 2
+// 2] Black & White
 void Black_White (Image& image) {
   for (int i=0; i < image.width; ++i) {
     for (int j=0; j < image.height; ++j) {
@@ -192,14 +201,20 @@ int main()
 string photo;
 int choice;
 string answer;
+cout<<"             >> Welcome to <PixelLab> image filters Program <<\n\n";
 cout<<" Enter Image's Name [with extension]: ";
 cin>>photo;
 Image image(photo);
 Image tempimage;//for saving
 string tempphoto = "tempphoto.jpg";
-do {
-  //Menu
 
+cout<<"\n                          ~< Filters List >~            \n \n";
+cout<<"                    1] Gray scale      2] Black & White  \n";
+cout<<"                    3] Invert colors   4] Frame          \n";
+cout<<"                    5] Flip            6] Rotate         \n";
+cout<<"                    7] Brightness      8] Resize         \n\n";
+
+do {
   cout<<" chose Filter's number: ";
   cin >> choice;
   switch (choice) {
@@ -241,17 +256,17 @@ do {
   tempimage = image;
   tempimage.saveImage(tempphoto);
   system(tempphoto.c_str());
-  remove("tempphoto.jpg");
   cout << " Do you want to apply another filter?\n ";
   cin >> answer;
+  remove("tempphoto.jpg");
 }
 while ( answer[0] == 'y' || answer[0] == 'Y');
 //final saving
 string newphoto;
-cout<<" Enter Modified Image Name [with wanted extension]: ";
+cout<<" Enter New Image Name [with wanted extension]: ";
 cin>>newphoto;
 image.saveImage(newphoto);
-cout << "\n >> Modified Image saved successfully! "<<endl;
-cout << "\n << Thank you for using our program! >>\n" << endl;
+cout << "\n >> Image saved successfully! "<<endl;
+cout << "\n                << Thank you for using our program! >>\n" << endl;
 return 0;
 }

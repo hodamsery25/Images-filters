@@ -2,6 +2,21 @@
 #include<filesystem>
 using namespace std;
 
+// 1] gray scale
+void grayscale(Image& image) {
+  for (int y = 0; y < image.height; ++y) {
+    for (int x = 0; x < image.width; ++x) {
+      unsigned char r = image.getPixel(x, y, 0);
+      unsigned char g = image.getPixel(x, y, 1);
+      unsigned char b = image.getPixel(x, y, 2);
+      unsigned char gray = static_cast<unsigned char>(0.21 * r + 0.72 * g + 0.07 * b);
+      image.setPixel(x, y, 0, gray);
+      image.setPixel(x, y, 1, gray);
+      image.setPixel(x, y, 2, gray);
+    }
+  }
+}
+
 // filter 2
 void Black_White (Image& image) {
   for (int i=0; i < image.width; ++i) {
@@ -51,6 +66,45 @@ void frame (Image& image){
     }
   }
   image = fr;
+}
+
+//// 5.1] Horizontal Flip
+void horizontal_flip(Image& image) {
+  for (int y = 0; y < image.height; ++y) {
+    for (int x = 0; x < image.width / 2; ++x) {
+      unsigned char r1 = image.getPixel(x, y, 0);
+      unsigned char g1 = image.getPixel(x, y, 1);
+      unsigned char b1 = image.getPixel(x, y, 2);
+      unsigned char r2 = image.getPixel(image.width - x - 1, y, 0);
+      unsigned char g2 = image.getPixel(image.width - x - 1, y, 1);
+      unsigned char b2 = image.getPixel(image.width - x - 1, y, 2);
+      image.setPixel(x, y, 0, r2);
+      image.setPixel(x, y, 1, g2);
+      image.setPixel(x, y, 2, b2);
+      image.setPixel(image.width - x - 1, y, 0, r1);
+      image.setPixel(image.width - x - 1, y, 1, g1);
+      image.setPixel(image.width - x - 1, y, 2, b1);
+    }
+  }
+}
+//// 5.2] Vertical Flip
+void vertical_flip(Image& image){
+  for (int y = 0; y < image.height / 2; ++y) {
+    for (int x = 0; x < image.width; ++x) {
+      unsigned char r1 = image.getPixel(x, y, 0);
+      unsigned char g1 = image.getPixel(x, y, 1);
+      unsigned char b1 = image.getPixel(x, y, 2);
+      unsigned char r2 = image.getPixel(x, image.height - y - 1, 0);
+      unsigned char g2 = image.getPixel(x, image.height - y - 1, 1);
+      unsigned char b2 = image.getPixel(x, image.height - y - 1, 2);
+      image.setPixel(x, y, 0, r2);
+      image.setPixel(x, y, 1, g2);
+      image.setPixel(x, y, 2, b2);
+      image.setPixel(x, image.height - y - 1, 0, r1);
+      image.setPixel(x, image.height - y - 1, 1, g1);
+      image.setPixel(x, image.height - y - 1, 2, b1);
+    }
+  }
 }
 
 //// 6] Rotation
@@ -150,6 +204,8 @@ do {
   cin >> choice;
   switch (choice) {
   case 1:
+      grayscale(image);
+      break;
   case 2:
       Black_White(image);
       break;
@@ -160,6 +216,11 @@ do {
       frame(image);
       break;
   case 5:
+      int M;
+      cout<< " 1] Horizontal flip   2]: Vertical flip\n ";
+      cin >> M;
+      M == 1? horizontal_flip(image) : vertical_flip(image) ;
+      break;
   case 6:
       Rotate(image);
       break;

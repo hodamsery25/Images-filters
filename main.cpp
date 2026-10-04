@@ -205,14 +205,19 @@ cout<<"             >> Welcome to <PixelLab> image filters Program <<\n\n";
 cout<<" Enter Image's Name [with extension]: ";
 cin>>photo;
 Image image(photo);
-Image tempimage;//for saving
+Image tempimage;
 string tempphoto = "tempphoto.jpg";
 
-cout<<"\n                          ~< Filters List >~            \n \n";
-cout<<"                    1] Gray scale      2] Black & White  \n";
-cout<<"                    3] Invert colors   4] Frame          \n";
-cout<<"                    5] Flip            6] Rotate         \n";
-cout<<"                    7] Brightness      8] Resize         \n\n";
+cout<<"\n                          ~< Filters List >~            \n\n";
+cout<<"                    1] Gray scale       2] Black & White  \n";
+cout<<"                    3] Invert colors    4] Frame          \n";
+cout<<"                    5] Flip             6] Rotate         \n";
+cout<<"                    7] Brightness       8] Resize         \n";
+cout<<"                    9] Merge           10] detect Edges   \n";
+cout<<"                   11] Crop            12] Blur           \n";
+cout<<"                   13] sunlight        14] TV effect      \n";
+cout<<"                   15] Purple          16] Infrared       \n";
+cout<<"                   17] Skew            18] Oil paint      \n\n";
 
 do {
   cout<<" chose Filter's number: ";
@@ -232,7 +237,7 @@ do {
       break;
   case 5:
       int M;
-      cout<< " 1] Horizontal flip   2]: Vertical flip\n ";
+      cout<< " 1] Horizontal flip   2] Vertical flip\n ";
       cin >> M;
       M == 1? horizontal_flip(image) : vertical_flip(image) ;
       break;
@@ -261,11 +266,17 @@ do {
   remove("tempphoto.jpg");
 }
 while ( answer[0] == 'y' || answer[0] == 'Y');
-//final saving
-string newphoto;
-cout<<" Enter New Image Name [with wanted extension]: ";
-cin>>newphoto;
-image.saveImage(newphoto);
+  
+cout<<" Do you want to save as a copy ?\n ";
+cin >> answer;
+if( answer[0] == 'y' || answer[0] == 'Y'){
+  string newphoto;
+  cout<<"\n Enter New Image Name [with wanted extension]: ";
+  cin >>newphoto;
+  image.saveImage(newphoto);
+}
+else image.saveImage(photo);
+  
 cout << "\n >> Image saved successfully! "<<endl;
 cout << "\n                << Thank you for using our program! >>\n" << endl;
 return 0;

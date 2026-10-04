@@ -196,6 +196,30 @@ void Resize (Image& image){
   image = resized;
 }
 
+//// 11] Crop
+void crop(Image& image){
+  int x,y,w,h;
+  cout<<"=Detect starting point (x,y) [will be upper left corner]";
+  cout<<"\n (x) coordinate: ";
+  cin >> x;
+  cout<<" (y) coordinate: ";
+  cin >> y;
+  cout<<"=New dimensions: ";
+  cout<<"\n Width: ";
+  cin >> w;
+  cout<<" Hight: ";
+  cin >> h;
+  Image cropped(w,h);
+  for(int r = 0; r < w; r++ ){
+    for(int c = 0; c < h; c++ ){
+      for(int N=0; N<3; N++){
+        cropped(r ,c ,N) = image(r+x,c+y,N);
+      }
+    }
+  }
+  image = cropped;
+}
+
 int main()
 {
 string photo;
@@ -250,6 +274,18 @@ do {
   case 8:
       Resize(image);
       break;
+  case  9:
+  case 10:
+  case 11:
+      crop(image);
+      break;
+  case 12:
+  case 13:
+  case 14:
+  case 15:
+  case 16:
+  case 17:
+  case 18:
   default:
       cout<< "=>Invalid choice!\n ";
       break;

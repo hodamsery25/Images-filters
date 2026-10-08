@@ -195,91 +195,63 @@ void Resize (Image& image){
   }
   image = resized;
 }
-// 10 detect image edges
-void detectEdges(string filename)
-{
-    Image image(filename);
-    Image result(image.width, image.height);
-
-    int Gx[3][3] =
-    {
-        {-1, 0, 1},
-        {-2, 0, 2},
-        {-1, 0, 1}
-    };
-
-    int Gy[3][3] =
-    {
-        {-1, -2, -1},
-        {0, 0, 0},
-        {1, 2, 1}
-    };
-
-    for (int y = 0; y < image.height; y++)
-    {
-        for (int x = 0; x < image.width; x++)
-        {
-            int r = image.getPixel(x, y, 0);
-            int g = image.getPixel(x, y, 1);
-            int b = image.getPixel(x, y, 2);
-
-            int gray = 0.299 * r + 0.587 * g + 0.114 * b;
-
-            image.setPixel(x, y, 0, gray);
-            image.setPixel(x, y, 1, gray);
-            image.setPixel(x, y, 2, gray);
-        }
+//// 10 detect image edges
+void detectEdges(Image& image){
+  Image result(image.width, image.height);
+  int Gx[3][3] = {
+    {-1, 0, 1},
+    {-2, 0, 2},
+    {-1, 0, 1}
+  };
+  int Gy[3][3] = {
+    {-1, -2, -1},
+    {0, 0, 0},
+    {1, 2, 1}
+  };
+  for (int y = 0; y < image.height; y++) {
+    for (int x = 0; x < image.width; x++) {
+      int r = image.getPixel(x, y, 0);
+      int g = image.getPixel(x, y, 1);
+      int b = image.getPixel(x, y, 2);
+      int gray = 0.299 * r + 0.587 * g + 0.114 * b;
+      image.setPixel(x, y, 0, gray);
+      image.setPixel(x, y, 1, gray);
+      image.setPixel(x, y, 2, gray);
     }
-
-    int threshold = 100;
-
-    for (int y = 1; y < image.height - 1; y++)
-    {
-        for (int x = 1; x < image.width - 1; x++)
-        {
-            int sumX = 0;
-            int sumY = 0;
-
-            for (int j = -1; j <= 1; j++)
-            {
-                for (int i = -1; i <= 1; i++)
-                {
-                    int val = image.getPixel(x + i, y + j, 0);
-                    sumX += val * Gx[j + 1][i + 1];
-                    sumY += val * Gy[j + 1][i + 1];
-                }
-            }
-
-            int magnitude = sqrt(sumX * sumX + sumY * sumY);
-
-            int color = (magnitude > threshold) ? 0 : 255;
-
-            result.setPixel(x, y, 0, color);
-            result.setPixel(x, y, 1, color);
-            result.setPixel(x, y, 2, color);
+  }
+  int threshold = 100;
+  for (int y = 1; y < image.height - 1; y++) {
+    for (int x = 1; x < image.width - 1; x++) {       {
+      int sumX = 0;
+      int sumY = 0;
+      for (int j = -1; j <= 1; j++) {
+        for (int i = -1; i <= 1; i++) {
+          int val = image.getPixel(x + i, y + j, 0);
+          sumX += val * Gx[j + 1][i + 1];
+          sumY += val * Gy[j + 1][i + 1];
         }
+      }
+      int magnitude = sqrt(sumX * sumX + sumY * sumY);
+      int color = (magnitude > threshold) ? 0 : 255;
+      result.setPixel(x, y, 0, color);
+      result.setPixel(x, y, 1, color);
+      result.setPixel(x, y, 2, color);
     }
-
-    for (int x = 0; x < image.width; x++)
-    {
-        for (int c = 0; c < 3; c++)
-        {
-            result.setPixel(x, 0, c, 255);
-            result.setPixel(x, image.height - 1, c, 255);
-        }
+  }
+  for (int x = 0; x < image.width; x++) {
+    for (int c = 0; c < 3; c++) {
+      result.setPixel(x, 0, c, 255);
+      result.setPixel(x, image.height - 1, c, 255);
     }
-
-    for (int y = 0; y < image.height; y++)
-    {
-        for (int c = 0; c < 3; c++)
-        {
-            result.setPixel(0, y, c, 255);
-            result.setPixel(image.width - 1, y, c, 255);
-        }
+  }
+  for (int y = 0; y < image.height; y++) {
+    for (int c = 0; c < 3; c++) {
+      result.setPixel(0, y, c, 255);
+      result.setPixel(image.width - 1, y, c, 255);
     }
-
-    result.saveImage("edges.jpeg");
-
+  }
+  image = result;
+}
 //// 11] Crop
 void crop(Image& image){
   int x,y,w,h;
@@ -369,6 +341,8 @@ do {
       break;
   case  9:
   case 10:
+      detectEdges(image);
+      break;
   case 11:
       crop(image);
       break;

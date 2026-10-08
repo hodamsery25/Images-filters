@@ -2,10 +2,10 @@
 FCAI-CU > 2nd Level > OOP > Assignment 1 > Image Filters
 Section : (15,16)
 Team members :
-20250666 Malak Mohamed  Filters: 1]Gray scale     5]Flip
-20250693 Merna Hany     Filters: 2]Black & White  6]Rotate
-20250721 Hoda Ahmad     Filters: 3]Inverting      7]Brightness
-20251051 Alaa Sayed    Filters: 4]Frame          8] Resize
+20250666 Malak Mohamed  Filters: 1]Gray scale     5]Flip       9]Merge       13]Fix natural sunlight
+20250693 Merna Hany     Filters: 2]Black & White  6]Rotate     10]Detect     14]Old TV Effect
+20250721 Hoda Ahmad     Filters: 3]Inverting      7]Brightness    11]Crop     15]purple effect
+20251051 Alaa Sayed    Filters: 4]Frame          8] Resize      12]Blur       16]Infrared photography
 */
 #include "Image_Class.h"
 #include<filesystem>

@@ -220,12 +220,21 @@ void crop(Image& image){
   image = cropped;
 }
 
+//// 15] Purple
+void purple(Image& image){
+  for(int r=0; r < image.width; r++ ){
+    for(int c=0; c < image.height; c++ ){
+      image(r,c,1) = 40;
+    }
+  }
+}
+
 int main()
 {
 string photo;
 int choice;
 string answer;
-cout<<"             >> Welcome to <PixelLab> image filters Program <<\n\n";
+cout<<"             >> Welcome to <PixelLab> Photo Editor! <<\n\n";
 cout<<" Enter Image's Name [with extension]: ";
 cin>>photo;
 Image image(photo);
@@ -283,6 +292,8 @@ do {
   case 13:
   case 14:
   case 15:
+      purple(image);
+      break;
   case 16:
   case 17:
   case 18:

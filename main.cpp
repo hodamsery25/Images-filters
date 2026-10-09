@@ -312,7 +312,16 @@ void crop(Image& image) {
   }
   image = cropped;
 }
-   
+     //13] sunlight
+void sunlight(Image& image) {
+    for (int r = 0; r < image.width; r++) {
+        for (int c = 0; c < image.height; c++) {
+        image(r, c, 0) = min(255, static_cast<int>(image(r, c, 0) * 1.2));
+        image(r, c, 1) = min(255, static_cast<int>(image(r, c, 1) * 1.2));
+        image(r, c, 2) = min(255, static_cast<int>(image(r, c, 2) * 1.2));
+        }
+    }
+    }  
 // 15] Purple
 void purple(Image& image) {
   for (int r = 0; r < image.width; r++) {

@@ -275,62 +275,44 @@ void crop(Image& image){
   }
   image = cropped;
 }
-// 14] TV Scanlines
-void applyScanlineTVFilter(Image &image)
-{
-    Image result = image;
-    for (int row = 1; row < image.height - 1; ++row)
-    {
-        for (int col = 1; col < image.width - 1; ++col)
-        {
-            for (int channel = 0; channel < 3; ++channel)
-            {
-                int sum = 0;
-
-                for (int y = -1; y <= 1; ++y)
-                {
-                    for (int x = -1; x <= 1; ++x)
-                    {
-                        sum += image(col + x, row + y, channel);
-                    }
-                }
-
-                result(col, row, channel) = sum / 9;
-            }
+//// 14] TV Scanlines
+void ScanlineTV(Image &image) {
+  Image result = image;
+  
+  for (int row = 1; row < image.height - 1; ++row) {
+    for (int col = 1; col < image.width - 1; ++col) {
+      for (int channel = 0; channel < 3; ++channel) {
+        int sum = 0;
+        for (int y = -1; y <= 1; ++y) {
+          for (int x = -1; x <= 1; ++x) 
+            { sum += image(col + x, row + y, channel); }
         }
+        result(col, row, channel) = sum / 9;
+      }
     }
-
-    
-    for (int row = 0; row < image.height; ++row)
-    {
-        for (int col = 0; col < image.width; ++col)
-        {
-            double red   = result(col, row, 0);
-            double green = result(col, row, 1);
-            double blue  = result(col, row, 2);
-          
-            red   *= 1.3;
-            green *= 1.3;
-            blue  *= 1.3;
-
-            
-            if (row % 2 == 0)
-            {
-                red   *= 0.15;
-                green *= 0.15;
-                blue  *= 0.15;
-            }
-
-            
-            if (red > 255)   red = 255;
-            if (green > 255) green = 255;
-            if (blue > 255)  blue = 255;
-
-            image(col, row, 0) = static_cast<int>(red);
-            image(col, row, 1) = static_cast<int>(green);
-            image(col, row, 2) = static_cast<int>(blue);
-        }
+  }
+  
+  for (int row = 0; row < image.height; ++row) {
+    for (int col = 0; col < image.width; ++col) {
+      double red   = result(col, row, 0);
+      double green = result(col, row, 1);
+      double blue  = result(col, row, 2);
+      red   *= 1.3;
+      green *= 1.3;
+      blue  *= 1.3;
+      if (row % 2 == 0) {
+        red   *= 0.15;
+        green *= 0.15;
+        blue  *= 0.15;
+      }
+      if (red > 255)   red = 255;
+      if (green > 255) green = 255;
+      if (blue > 255)  blue = 255;
+      image(col, row, 0) = static_cast<int>(red);
+      image(col, row, 1) = static_cast<int>(green);
+      image(col, row, 2) = static_cast<int>(blue);
     }
+  }
 }
 
 //// 15] Purple
@@ -407,6 +389,8 @@ do {
   case 12:
   case 13:
   case 14:
+      ScanlineTV(image);
+      break;
   case 15:
       purple(image);
       break;

@@ -359,7 +359,7 @@ int choice;
 string answer;
 cout<<"             >> Welcome to <PixelLab> Photo Editor! <<\n\n";
 cout<<" Enter Image's Name [with extension]: ";
-cin>>photo;
+getline(cin, photo);
 Image image(photo);
 Image tempimage;
 string tempphoto = "tempphoto.jpg";
@@ -444,7 +444,8 @@ cin >> answer;
 if( answer[0] == 'y' || answer[0] == 'Y'){
   string newphoto;
   cout<<"\n Enter New Image Name [with wanted extension]: ";
-  cin >>newphoto;
+  cin.ignore();
+  getline(cin,newphoto);
   image.saveImage(newphoto);
 }
 else image.saveImage(photo);

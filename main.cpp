@@ -333,16 +333,6 @@ void applyScanlineTVFilter(Image &image)
     }
 }
 
-int main()
-{
-    Image image("image.jpeg");
-
-    applyScanlineTVFilter(image);
-
-    image.saveImage("output.png");
-
-    return 0;
-}
 //// 15] Purple
 void purple(Image& image){
   for(int r=0; r < image.width; r++ ){

@@ -203,16 +203,103 @@ void Resize(Image& image) {
   }
   image = resized;
 }
-   //9] Merge
+   
+// 9] Merge
 void merge(Image& image) {  
-  string photo2;
-  cout << " Enter the second image name [with extension]: ";
-  cin >> photo2;
-  Image image2(photo2);
-  if (image.width != image2.width || image.height != image2.height) {
-    cout << "=>Error: Images must have the same dimensions to merge.\n";
-    return;
-  }
+    string photo2;
+    cout << " Enter the second image name [with extension]: ";
+    cin >> photo2;
+    Image image2(photo2);
+
+    int mergeWidth;
+    int mergeHeight;
+
+    if (image.width != image2.width || image.height != image2.height) {
+        int option;
+
+        cout << "\nImages have different dimensions.\n";
+        cout << "1. Resize both images and merge\n";
+        cout << "2. Merge only the overlapping area\n";
+        cout << "Choose an option (1 or 2): ";
+        cin >> option;
+
+        if (option == 1) {
+            mergeWidth = max(image.width, image2.width);
+            mergeHeight = max(image.height, image2.height);
+            
+            
+            Image resized1(mergeWidth, mergeHeight);
+            for (int x = 0; x < mergeWidth; x++) {
+                for (int y = 0; y < mergeHeight; y++) {
+                    int X = x * image.width / mergeWidth;
+                    int Y = y * image.height / mergeHeight;
+                    for (int c = 0; c < 3; c++) {
+                        resized1(x, y, c) = image(X, Y, c);
+                    }
+                }
+            }
+            image = resized1;
+
+            Image resized2(mergeWidth, mergeHeight);
+            for (int x = 0; x < mergeWidth; x++) {
+                for (int y = 0; y < mergeHeight; y++) {
+                    int X = x * image2.width / mergeWidth;
+                    int Y = y * image2.height / mergeHeight;
+                    for (int c = 0; c < 3; c++) {
+                        resized2(x, y, c) = image2(X, Y, c);
+                    }
+                }
+            }
+            image2 = resized2;
+        }
+        else if (option == 2) {
+            mergeWidth = min(image.width, image2.width);
+            mergeHeight = min(image.height, image2.height);
+        }
+        else {
+            cout << "Invalid option!\n";
+            return;
+        }
+    }
+    else {
+        mergeWidth = image.width;
+        mergeHeight = image.height;
+    }
+
+    if (mergeWidth <= 0 || mergeHeight <= 0) {
+        cout << "Invalid image dimensions.\n";
+        return;
+    }
+
+    float alpha;
+    cout << "Enter the alpha value [0.0 - 1.0]: ";
+    cin >> alpha;
+
+    if (alpha < 0.0f || alpha > 1.0f) {
+        cout << "Error: Alpha value must be between 0.0 and 1.0.\n";
+        return;
+    }
+
+}
+    for (int x = 0; x < mergeWidth; x++)  {
+        for (int y = 0; y < mergeHeight; y++) {
+            for (int c = 0; c < 3; c++) {
+                // Blend the pixels from both images using the alpha value
+                image(x, y, c) = (alpha * image(x, y, c)) + ((1.0f - alpha) * image2(x, y, c));
+            }
+        }
+    }
+    
+    cout << "Images merged successfully!\n";
+ 
+// 10 detect image edges
+void detectEdges(Image& image) {
+  Image result(image.width, image.height);
+  int Gx[3][3] = {
+    {-1, 0, 1},
+    {-2, 0, 2},
+    {-1, 0, 1}  
+  };
   float alpha;
   cout << " Enter the alpha value [0.0 - 1.0]: ";
   cin >> alpha;
@@ -229,16 +316,7 @@ void merge(Image& image) {
         image.setPixel(x, y, c, mergedPixel);
       }
     }
-  }
-} 
-// 10 detect image edges
-void detectEdges(Image& image) {
-  Image result(image.width, image.height);
-  int Gx[3][3] = {
-    {-1, 0, 1},
-    {-2, 0, 2},
-    {-1, 0, 1}
-  };
+  }};
   int Gy[3][3] = {
     {-1, -2, -1},
     {0, 0, 0},

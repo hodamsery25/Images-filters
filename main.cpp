@@ -390,35 +390,80 @@ void crop(Image& image) {
   }
   image = cropped;
 }
-     //13] sunlight
+// 13] Sunlight
 void sunlight(Image& image) {
     for (int r = 0; r < image.width; r++) {
         for (int c = 0; c < image.height; c++) {
-        image(r, c, 0) = min(255, static_cast<int>(image(r, c, 0) * 1.2));
-        image(r, c, 1) = min(255, static_cast<int>(image(r, c, 1) * 1.2));
-        image(r, c, 2) = min(255, static_cast<int>(image(r, c, 2) * 1.2));
+            image(r, c, 0) = min(255, static_cast<int>(image(r, c, 0) * 1.2));
+            image(r, c, 1) = min(255, static_cast<int>(image(r, c, 1) * 1.2));
+            image(r, c, 2) = min(255, static_cast<int>(image(r, c, 2) * 1.2));
         }
     }
-    }  
+}
+
+// 14] TV Scanlines
+void ScanlineTV(Image& image) {
+    Image result = image;
+
+    for (int row = 1; row < image.height - 1; ++row) {
+        for (int col = 1; col < image.width - 1; ++col) {
+            for (int channel = 0; channel < 3; ++channel) {
+                int sum = 0;
+
+                for (int y = -1; y <= 1; ++y) {
+                    for (int x = -1; x <= 1; ++x) {
+                        sum += image(col + x, row + y, channel);
+                    }
+                }
+
+                result(col, row, channel) = sum / 9;
+            }
+        }
+    }
+
+    for (int row = 0; row < image.height; ++row) {
+        for (int col = 0; col < image.width; ++col) {
+            double red = result(col, row, 0) * 1.3;
+            double green = result(col, row, 1) * 1.3;
+            double blue = result(col, row, 2) * 1.3;
+
+            if (row % 2 == 0) {
+                red *= 0.15;
+                green *= 0.15;
+                blue *= 0.15;
+            }
+
+            image(col, row, 0) = min(255, static_cast<int>(red));
+            image(col, row, 1) = min(255, static_cast<int>(green));
+            image(col, row, 2) = min(255, static_cast<int>(blue));
+        }
+    }
+}
+
 // 15] Purple
 void purple(Image& image) {
-  for (int r = 0; r < image.width; r++) {
-    for (int c = 0; c < image.height; c++) {
-      image(r, c, 1) = 40;
+    for (int r = 0; r < image.width; r++) {
+        for (int c = 0; c < image.height; c++) {
+            image(r, c, 1) /= 3;
+            image(r, c, 2) = min(
+                255, static_cast<int>(image(r, c, 2) * 1.3)
+            );
+        }
     }
-  }
 }
 
 int main() {
-  string photo;
-  int choice;
-  string answer;
-  cout << "             >> Welcome to <PixelLab> Photo Editor! <<\n\n";
-  cout << " Enter Image's Name [with extension]: ";
-  cin >> photo;
-  Image image(photo);
-  Image tempimage;
-  string tempphoto = "tempphoto.jpg";
+    string photo;
+    int choice;
+    string answer;
+
+    cout << "             >> Welcome to <PixelLab> Photo Editor! <<\n\n";
+    cout << " Enter Image's Name [with extension]: ";
+    getline(cin, photo);
+
+    Image image(photo);
+    Image tempimage;
+    string tempphoto = "tempphoto.jpg"; 
 
   cout << "\n                          ~< Filters List >~            \n\n";
   cout << "                    1] Gray scale       2] Black & White  \n";
@@ -431,63 +476,92 @@ int main() {
   cout << "                   15] Purple          16] Infrared       \n";
   cout << "                   17] Skew            18] Oil paint      \n\n";
 
-  do {
-    cout << " chose Filter's number: ";
-    cin >> choice;
-    switch (choice) {
-      case 1:
-        grayscale(image);
-        break;
-      case 2:
-        Black_White(image);
-        break;
-      case 3:
-        invert(image);
-        break;
-      case 4:
-        frame(image);
-        break;
-      case 5: {
-        int M;
-        cout << " 1] Horizontal flip   2] Vertical flip\n ";
-        cin >> M;
-        M == 1 ? horizontal_flip(image) : vertical_flip(image);
-        break;
-      }
-      case 6:
-        Rotate(image);
-        break;
-      case 7:
-        brightness(image);
-        break;
-      case 8:
-        Resize(image);
-        break;
-      case 9:
-        merge(image);
-        break;
-      case 10:
-        detectEdges(image);
-        break;
-      case 11:
-        crop(image);
-        break;
-      case 12:
-      case 13:
-        sunlight(image);
-        break; 
-      case 14:
-      case 15:
-        purple(image);
-        break;
-      case 16:
-      case 17:
-      case 18:
-      default:
-        cout << "=>Invalid choice!\n ";
-        break;
-    }
-    choice = 0;
+    do {
+        cout << " chose Filter's number: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                grayscale(image);
+                break;
+
+            case 2:
+                Black_White(image);
+                break;
+
+            case 3:
+                invert(image);
+                break;
+
+            case 4:
+                frame(image);
+                break;
+
+            case 5: {
+                int M;
+                cout << " 1] Horizontal flip   2] Vertical flip\n ";
+                cin >> M;
+
+                if (M == 1)
+                    horizontal_flip(image);
+                else if (M == 2)
+                    vertical_flip(image);
+                else
+                    cout << "Invalid flip choice!\n";
+
+                break;
+            }
+
+            case 6:
+                Rotate(image);
+                break;
+
+            case 7:
+                brightness(image);
+                break;
+
+            case 8:
+                Resize(image);
+                break;
+
+            case 9:
+                merge(image);
+                break;
+
+            case 10:
+                detectEdges(image);
+                break;
+
+            case 11:
+                crop(image);
+                break;
+
+            case 12:
+                // Blur filter goes here if implemented
+                cout << "Blur filter is not connected yet.\n";
+                break;
+
+            case 13:
+                sunlight(image);
+                break;
+
+            case 14:
+                ScanlineTV(image);
+                break;
+
+            case 15:
+                purple(image);
+                break;
+
+            case 16:
+            case 17:
+            case 18:
+            default:
+                cout << "=> Invalid choice!\n";
+                break;
+        }
+
+        choice = 0; 
 
     tempimage = image;
     tempimage.saveImage(tempphoto);
@@ -499,16 +573,25 @@ int main() {
 
   cout << " Do you want to save as a copy ?\n ";
   cin >> answer;
-  if (answer[0] == 'y' || answer[0] == 'Y') {
-    string newphoto;
-    cout << "\n Enter New Image Name [with wanted extension]: ";
-    cin >> newphoto;
-    image.saveImage(newphoto);
-  } else {
-    image.saveImage(photo);
-  }
+    } while (answer[0] == 'y' || answer[0] == 'Y');
 
-  cout << "\n                << Thank you for using our program! >>\n" << endl;
-  return 0;
-}
+    remove("tempphoto.jpg");
+
+    cout << " Do you want to save as a copy?\n ";
+    cin >> answer;
+
+    if (answer[0] == 'y' || answer[0] == 'Y') {
+        string newphoto;
+        cout << "\n Enter New Image Name [with wanted extension]: ";
+        cin.ignore();
+        getline(cin, newphoto);
+        image.saveImage(newphoto);
+    } else {
+        image.saveImage(photo);
+    }
+
+    cout << "\n >> Image saved successfully! " << endl;
+    cout << "\n                << Thank you for using our program! >>\n" << endl;
+    return 0;
+} 
     

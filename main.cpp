@@ -347,7 +347,8 @@ int main()
 void purple(Image& image){
   for(int r=0; r < image.width; r++ ){
     for(int c=0; c < image.height; c++ ){
-      image(r,c,1) = 40;
+      image(r,c,1) /= 3;
+      image(r,c,2) = min(255, static_cast<int>(image(r,c,2)*1.3));
     }
   }
 }
